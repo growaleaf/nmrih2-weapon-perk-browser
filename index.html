@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>No More Room in Hell 2 — Weapon &amp; Perk Browser</title>
+<meta name="description" content="Sortable gun and melee weapon tables, plus a perk-pick reference, for No More Room in Hell 2 — every tier and stat labeled by how many independent sources confirm it.">
+<style>
+  :root {
+    --bg: #11151c;
+    --panel: #1a2029;
+    --panel-border: #313c4d;
+    --ink: #e4e8ee;
+    --ink-dim: #9aa6b5;
+    --accent: #4f8fae;
+    --accent-bright: #7bc3e8;
+    --field-bg: #0c0f14;
+    --warn: #c2874f;
+    --ok: #5fa876;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.55;
+  }
+  main {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 32px 20px 80px;
+  }
+  h1 {
+    font-size: 1.4rem;
+    margin: 0 0 4px;
+    border-bottom: 1px solid var(--panel-border);
+    padding-bottom: 16px;
+  }
+  .sub {
+    color: var(--ink-dim);
+    font-size: 0.93rem;
+    margin: 0 0 28px;
+  }
+  .sub a { color: var(--accent-bright); }
+  section {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 6px;
+    padding: 20px 22px;
+    margin-bottom: 20px;
+  }
+  section h2 {
+    font-size: 1.1rem;
+    margin: 0 0 6px;
+  }
+  .section-note {
+    color: var(--ink-dim);
+    font-size: 0.85rem;
+    margin: 0 0 16px;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem;
+  }
+  table th, table td {
+    border: 1px solid var(--panel-border);
+    padding: 7px 9px;
+    text-align: left;
+    vertical-align: top;
+  }
+  table th {
+    color: var(--ink-dim);
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+    background: var(--field-bg);
+    cursor: pointer;
+    user-select: none;
+    white-space: nowrap;
+  }
+  table th.sortable:hover { color: var(--accent-bright); }
+  table th .sort-arrow { color: var(--accent-bright); margin-left: 4px; }
+  td.name { white-space: nowrap; font-weight: 600; }
+  td.tier { white-space: nowrap; }
+  .tier-badge {
+    display: inline-block;
+    min-width: 1.4em;
+    text-align: center;
+    border-radius: 3px;
+    padding: 1px 6px;
+    font-weight: 700;
+    background: var(--field-bg);
+    border: 1px solid var(--panel-border);
+  }
+  .unconfirmed {
+    display: block;
+    font-size: 0.74rem;
+    color: var(--warn);
+    margin-top: 3px;
+  }
+  .confirmed-flag {
+    display: block;
+    font-size: 0.74rem;
+    color: var(--ok);
+    margin-top: 3px;
+  }
+  .note {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--ink-dim);
+    margin-top: 3px;
+  }
+  .dispute-note {
+    display: block;
+    font-size: 0.78rem;
+    color: var(--warn);
+    margin-top: 3px;
+  }
+  .not-available { color: var(--ink-dim); font-style: italic; }
+  .callout {
+    font-size: 0.85rem;
+    color: var(--ink-dim);
+    background: var(--field-bg);
+    border: 1px solid var(--panel-border);
+    border-radius: 4px;
+    padding: 12px 14px;
+    margin: 14px 0 0;
+  }
+  .callout strong { color: var(--ink); }
+  .callout.warn { border-color: var(--warn); }
+  .recommended-badge {
+    display: inline-block;
+    font-size: 0.7rem;
+    color: var(--ok);
+    border: 1px solid var(--ok);
+    border-radius: 3px;
+    padding: 0 5px;
+    margin-left: 6px;
+    white-space: nowrap;
+  }
+  .sources-section {
+    font-size: 0.82rem;
+    color: var(--ink-dim);
+  }
+  .sources-section h2 { font-size: 1.05rem; }
+  .sources-section ul { margin: 6px 0 16px; padding-left: 22px; }
+  .sources-section li { margin-bottom: 8px; }
+  .sources-section a { color: var(--accent-bright); }
+  .self-test { font-size: 0.75rem; color: var(--ink-dim); margin-top: 10px; }
+  .self-test.ok { color: var(--accent-bright); }
+  .self-test.bad { color: var(--warn); }
+  footer {
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 0 20px 40px;
+    font-size: 0.8rem;
+    color: var(--ink-dim);
+  }
+  footer a { color: var(--accent-bright); }
+</style>
+</head>
+<body>
+<main>
+  <h1>No More Room in Hell 2 — Weapon &amp; Perk Browser</h1>
+  <p class="sub">A reference for
+  <a href="https://store.steampowered.com/app/292000" target="_blank" rel="noopener">No More Room in Hell 2</a>'s
+  guns, melee weapons, and level-up perk pool. Every tier and every number below is labeled by how
+  many independent sources confirm it — a single-sourced figure is shown as single-sourced, not
+  silently treated as settled. This page does not hand you a verdict; it hands you what the
+  sources actually say, including where they disagree with each other. Nothing here is saved or
+  sent anywhere — it renders from the data in this page in your browser.</p>
+
+  <section>
+    <h2>Guns</h2>
+    <p class="section-note">Tier letters are itemlevel.net's own tier list. Click a column header
+    to sort. A capacity or damage figure is only shown as confirmed when two independent sources
+    give the same value — otherwise it's labeled single-sourced with its source named inline.</p>
+    <table id="gunsTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-key="name">Gun</th>
+          <th class="sortable" data-key="ammo">Ammo</th>
+          <th class="sortable" data-key="tier">Tier</th>
+          <th class="sortable" data-key="capacity">Capacity</th>
+          <th class="sortable" data-key="damage">Damage</th>
+        </tr>
+      </thead>
+      <tbody id="gunsBody"></tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Melee weapons</h2>
+    <p class="section-note">Tier letters come from a single post-1.0-combat-rework guide
+    (allthings.how). Only 13 of the 19 melee weapons in the current roster are tiered by any
+    source found; the rest show as untiered rather than guessed into a tier. Click a column header
+    to sort.</p>
+    <table id="meleeTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-key="name">Weapon</th>
+          <th class="sortable" data-key="role">Role</th>
+          <th class="sortable" data-key="tier">Tier</th>
+        </tr>
+      </thead>
+      <tbody id="meleeBody"></tbody>
+    </table>
+    <div class="callout warn" id="meleeDisputeNote"></div>
+  </section>
+
+  <section>
+    <h2>Perk pick helper</h2>
+    <p class="section-note">No More Room in Hell 2 offers 3 random perks at a level-up and asks you
+    to keep one. The table below lists every perk sourced for this build, with the profession that
+    starts with it. "Commonly recommended" is a guide's framing, not a verdict this page makes —
+    see the note above the table.</p>
+    <div class="callout" id="safeEarlyPicksNote"></div>
+    <table id="perksTable">
+      <thead>
+        <tr>
+          <th class="sortable" data-key="profession">Profession</th>
+          <th class="sortable" data-key="name">Perk</th>
+          <th>Effect</th>
+        </tr>
+      </thead>
+      <tbody id="perksBody"></tbody>
+    </table>
+  </section>
+
+  <section class="sources-section">
+    <h2>Sources &amp; last verified date</h2>
+    <p class="verified">All pages and threads below fetched and re-read directly 2026-10-22.</p>
+    <ul>
+      <li><a href="https://itemlevel.net/no-more-room-in-hell-2-guns-tier-list/" target="_blank" rel="noopener">itemlevel.net — No More Room in Hell 2 Guns Tier List</a>
+      — sole source for every gun's tier letter and for every damage number on this page.</li>
+      <li><a href="https://www.gamer.org/no-more-room-in-hell-2-best-guns-ranked/" target="_blank" rel="noopener">gamer.org — a ranked list of 6 No More Room in Hell 2 guns</a>
+      — an independent ranked list of 6 guns, used only as a second source for ammo capacity
+      (M14, X12 Super) and to check tier *direction* (it places the same 6 guns in the same
+      relative order as itemlevel's tiers). It gives no damage numbers at all.</li>
+      <li><a href="https://nerdschalk.com/no-more-room-in-hell-2-weapons-guide-all-guns-melee-weapons-and-explosives/" target="_blank" rel="noopener">nerdschalk.com — weapons guide</a>
+      — checked directly as a candidate second source for gun tiers. It lists the full weapon
+      roster (confirming names and ammo types) but contains no tier rankings or numeric stats at
+      all, so it does not corroborate any tier or number on this page.</li>
+      <li><a href="https://allthings.how/no-more-room-in-hell-2-melee-weapons-tier-list/" target="_blank" rel="noopener">allthings.how — melee weapons tier list (post-1.0)</a>
+      — sole source for every melee tier shown above.</li>
+      <li><a href="https://steamcommunity.com/app/292000/discussions/0/651440877420452857" target="_blank" rel="noopener">Steam Community — "Melee weapon tier?" thread (Apr 2025)</a>
+      — community discussion predating the 1.0 combat rework; used only for the Claw Hammer /
+      Crowbar disagreement surfaced above, not to confirm or deny the current tier list.</li>
+      <li><a href="https://powerupgaming.co.uk/2026/08/13/no-more-room-in-hell-2-all-characters-professions-skills/" target="_blank" rel="noopener">powerupgaming.co.uk — all characters, professions, skills</a>
+      — primary source for every perk's profession and effect text on this page.</li>
+      <li><a href="https://allthings.how/" target="_blank" rel="noopener">allthings.how — skills tier list for the 1.0 "Armageddon" patch</a>
+      — independent second source checked against every perk above; corroborated effects are
+      flagged, and this is also the source for the 4 commonly-recommended early picks and for the
+      two version-conflict notes (Teddy Bear, Averaging) disclosed in the perk table.</li>
+    </ul>
+    <p class="self-test" id="selfTest">running self-test…</p>
+  </section>
+</main>
+
+<footer>
+  Fan-made reference tool, unaffiliated with the developers of No More Room in Hell 2. Figures
+  above reflect the sources cited, fetched 2026-10-22, and may not match every patch — verify
+  against your own in-run screen before relying on a number. No account, no server, no data
+  leaves your browser.
+</footer>
+
+<script src="data.js"></script>
+<script>
+(function () {
+  "use strict";
+  var D = window.NMRIH2DATA;
+  var gunSort = { key: "tier", dir: 1 };
+  var meleeSort = { key: "tier", dir: 1 };
+  var perkSort = { key: "profession", dir: 1 };
+
+  function textNode(tag, cls, text) {
+    var el = document.createElement(tag);
+    if (cls) el.className = cls;
+    if (text !== undefined && text !== null) el.textContent = text;
+    return el;
+  }
+
+  // ───────────────────────────────── guns
+
+  function gunCapacityCell(gun) {
+    var td = document.createElement("td");
+    if (!gun.capacity.value) {
+      td.appendChild(textNode("span", "not-available", "not stated by any source found"));
+      return td;
+    }
+    td.appendChild(document.createTextNode(gun.capacity.value));
+    if (gun.capacity.confirmed) {
+      td.appendChild(textNode("span", "confirmed-flag", "2-source confirmed: " + gun.capacity.sources.join("; ")));
+    } else {
+      td.appendChild(textNode("span", "unconfirmed", "single-sourced (" + gun.capacity.sources.join("; ") + ")"));
+    }
+    return td;
+  }
+
+  function gunDamageCell(gun) {
+    var td = document.createElement("td");
+    if (!gun.damage.value) {
+      td.appendChild(textNode("span", "not-available", "not stated by any source found"));
+      return td;
+    }
+    td.appendChild(document.createTextNode(gun.damage.value));
+    if (gun.damage.confirmed) {
+      td.appendChild(textNode("span", "confirmed-flag", "2-source confirmed: " + gun.damage.sources.join("; ")));
+    } else {
+      td.appendChild(textNode("span", "unconfirmed", "single-sourced, not independently confirmed (" + gun.damage.sources.join("; ") + ")"));
+    }
+    return td;
+  }
+
+  function renderGuns() {
+    var rows = D.GUNS.slice().sort(function (a, b) {
+      var k = gunSort.key, dir = gunSort.dir;
+      var av, bv;
+      if (k === "tier") { av = D.GUN_TIER_ORDER[a.tier]; bv = D.GUN_TIER_ORDER[b.tier]; }
+      else if (k === "capacity") { av = a.capacity.value || ""; bv = b.capacity.value || ""; }
+      else if (k === "damage") { av = a.damage.value || ""; bv = b.damage.value || ""; }
+      else { av = a[k]; bv = b[k]; }
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return a.name.localeCompare(b.name);
+    });
+    var body = document.getElementById("gunsBody");
+    body.innerHTML = "";
+    rows.forEach(function (gun) {
+      var tr = document.createElement("tr");
+      tr.appendChild(textNode("td", "name", gun.name));
+      tr.appendChild(textNode("td", null, gun.ammo));
+
+      var tierTd = document.createElement("td");
+      tierTd.className = "tier";
+      tierTd.appendChild(textNode("span", "tier-badge", gun.tier));
+      tierTd.appendChild(textNode("span", "note", "source: " + gun.tierSource));
+      if (gun.tierDirectionNote) tierTd.appendChild(textNode("span", "confirmed-flag", gun.tierDirectionNote));
+      tr.appendChild(tierTd);
+
+      tr.appendChild(gunCapacityCell(gun));
+      tr.appendChild(gunDamageCell(gun));
+
+      if (gun.note) {
+        var noteTd = tr.lastChild;
+        noteTd.appendChild(textNode("span", "note", gun.note));
+      }
+
+      body.appendChild(tr);
+    });
+  }
+
+  // ───────────────────────────────── melee
+
+  function renderMelee() {
+    var rows = D.MELEE.slice().sort(function (a, b) {
+      var k = meleeSort.key, dir = meleeSort.dir;
+      var av, bv;
+      if (k === "tier") {
+        av = a.tier ? D.MELEE_TIER_ORDER[a.tier] : 99;
+        bv = b.tier ? D.MELEE_TIER_ORDER[b.tier] : 99;
+      } else { av = a[k]; bv = b[k]; }
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return a.name.localeCompare(b.name);
+    });
+    var body = document.getElementById("meleeBody");
+    body.innerHTML = "";
+    rows.forEach(function (w) {
+      var tr = document.createElement("tr");
+      tr.appendChild(textNode("td", "name", w.name));
+      tr.appendChild(textNode("td", null, w.role));
+
+      var tierTd = document.createElement("td");
+      tierTd.className = "tier";
+      if (w.tier) {
+        tierTd.appendChild(textNode("span", "tier-badge", w.tier));
+        tierTd.appendChild(textNode("span", "note", "source: " + w.tierSource));
+      } else {
+        tierTd.appendChild(textNode("span", "not-available", "not tiered by any source found"));
+      }
+      if (w.note) {
+        var cls = w.name === "Claw Hammer" ? "dispute-note" : "note";
+        tierTd.appendChild(textNode("span", cls, w.note));
+      }
+      tr.appendChild(tierTd);
+
+      body.appendChild(tr);
+    });
+
+    var note = D.MELEE_COMMUNITY_NOTE;
+    var box = document.getElementById("meleeDisputeNote");
+    box.innerHTML = "";
+    box.appendChild(textNode("strong", null, "Community discussion (not used to confirm the tiers above): "));
+    box.appendChild(document.createTextNode(note.text));
+    var cite = textNode("div", "note", note.thread);
+    box.appendChild(cite);
+  }
+
+  // ───────────────────────────────── perks
+
+  function renderPerks() {
+    var rows = D.PERKS.slice().sort(function (a, b) {
+      var k = perkSort.key, dir = perkSort.dir;
+      var av = a[k], bv = b[k];
+      if (av < bv) return -1 * dir;
+      if (av > bv) return 1 * dir;
+      return a.name.localeCompare(b.name);
+    });
+    var body = document.getElementById("perksBody");
+    body.innerHTML = "";
+    rows.forEach(function (p) {
+      var tr = document.createElement("tr");
+      tr.appendChild(textNode("td", null, p.profession));
+
+      var nameTd = document.createElement("td");
+      nameTd.className = "name";
+      nameTd.appendChild(document.createTextNode(p.name));
+      if (D.SAFE_EARLY_PICKS.indexOf(p.name) !== -1) {
+        nameTd.appendChild(textNode("span", "recommended-badge", "commonly recommended"));
+      }
+      if (!p.corroborated) {
+        nameTd.appendChild(textNode("span", "unconfirmed", "single-sourced (powerupgaming.co.uk)"));
+      } else {
+        nameTd.appendChild(textNode("span", "confirmed-flag", "effect corroborated by allthings.how"));
+      }
+      tr.appendChild(nameTd);
+
+      var effectTd = document.createElement("td");
+      effectTd.appendChild(document.createTextNode(p.effect));
+      if (p.conflict) effectTd.appendChild(textNode("span", "dispute-note", p.conflict));
+      tr.appendChild(effectTd);
+
+      body.appendChild(tr);
+    });
+
+    var note = document.getElementById("safeEarlyPicksNote");
+    note.innerHTML = "";
+    note.appendChild(textNode("strong", null, "Commonly recommended early picks: "));
+    note.appendChild(document.createTextNode(D.SAFE_EARLY_PICKS.join(", ") + ". " + D.SAFE_EARLY_PICKS_SOURCE));
+  }
+
+  function wireSort(tableId, state, renderFn) {
+    var table = document.getElementById(tableId);
+    table.querySelectorAll("th.sortable").forEach(function (th) {
+      th.addEventListener("click", function () {
+        var key = th.getAttribute("data-key");
+        if (state.key === key) state.dir *= -1;
+        else { state.key = key; state.dir = 1; }
+        table.querySelectorAll("th .sort-arrow").forEach(function (a) { a.remove(); });
+        var arrow = document.createElement("span");
+        arrow.className = "sort-arrow";
+        arrow.textContent = state.dir === 1 ? "↑" : "↓";
+        th.appendChild(arrow);
+        renderFn();
+      });
+    });
+  }
+
+  wireSort("gunsTable", gunSort, renderGuns);
+  wireSort("meleeTable", meleeSort, renderMelee);
+  wireSort("perksTable", perkSort, renderPerks);
+
+  renderGuns();
+  renderMelee();
+  renderPerks();
+
+  // Structural self-test mirroring test.js, so opening the file directly also proves the data
+  // shape without a terminal.
+  (function selfTest() {
+    var el = document.getElementById("selfTest");
+    var pass = 0, total = 5;
+    if (D.GUNS.length === 15) pass++;
+    if (D.MELEE.length === 19) pass++;
+    if (D.PERKS.length === 44) pass++;
+    if (D.GUNS.every(function (g) { return g.damage.value === null || g.damage.sources.length > 0; })) pass++;
+    var bannedWords = ["best", "optimal", "strongest", "guaranteed", "approved", "certified", "compliant", "safe"];
+    var visibleText = (document.querySelector("main").textContent + " " + document.querySelector("footer").textContent).toLowerCase();
+    if (bannedWords.every(function (w) { return visibleText.indexOf(w) === -1; })) pass++;
+    el.textContent = "self-test: " + pass + "/" + total + " known-answer scenarios passed";
+    el.className = "self-test " + (pass === total ? "ok" : "bad");
+  })();
+})();
+</script>
+</body>
+</html>
